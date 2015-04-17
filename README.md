@@ -1,2 +1,2 @@
-# Motz.github.io
+# Motz
 Repository created to showcase personal projects

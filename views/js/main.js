@@ -406,12 +406,15 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
+      // Changed querySelector to getElementById which is faster
         document.getElementById("pizzaSize").innerHTML = "Small";
         return;
       case "2":
+      // Changed querySelector to getElementById which is faster
         document.getElementById("pizzaSize").innerHTML = "Medium";
         return;
       case "3":
+      // Changed querySelector to getElementById which is faster
         document.getElementById("pizzaSize").innerHTML = "Large";
         return;
       default:
@@ -424,6 +427,7 @@ var resizePizzas = function(size) {
   // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
   function determineDx (elem, size) {
     var oldwidth = elem.offsetWidth;
+    // Changed querySelector to getElementById which is faster
     var windowwidth = document.getElementById("randomPizzas").offsetWidth;
     var oldsize = oldwidth / windowwidth;
 
@@ -469,6 +473,7 @@ window.performance.mark("mark_start_generating"); // collect timing data
 
 // This for-loop actually creates and appends all of the pizzas when the page loads
 for (var i = 2; i < 100; i++) {
+  // Changed querySelector to getElementById which is fasters
   var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
@@ -508,6 +513,7 @@ function updatePositions() {
     //items[i].style.transform = "translateX(" + phase + "px)";
   }
 
+  // Once this function is called, the flag is set to false so it can be called once again
   recentlyUpdated = false;
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
@@ -519,8 +525,18 @@ function updatePositions() {
   }
 }
 
+// Added a new function to work with the requestAnimationFrame
+
+// The function requestAnimationFrame allows the following:
+// Animations run smoother
+// Animations in inactive tabs will stop, allowing the cpu to chill
+// it is more battery-friendly as Paul Irish stated
+
+// This var is used as a flag for the updatePosition function so that when the eventListener is
+// called, it checks if the function is finished executing before calling updatePosition Again
 var recentlyUpdated = false;
 
+// New function created to use the requestAnimationFrame
 function newUpdatePositions(){
   if(!recentlyUpdated){
     requestAnimationFrame(updatePositions);
@@ -537,6 +553,8 @@ window.addEventListener('scroll', newUpdatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  // Added wh, which identifies the window height so that we can display a more 
+  // exact number of pizzas instead of having a fixed number like 200
   var wh = (window.innerHeight || document.documentElement.clientHeight || 1080);
   var pizzas = Math.ceil(wh / s)*cols;
   for (var i = 0; i < pizzas; i++) {
@@ -548,6 +566,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     //document.querySelector("#movingPizzas1").appendChild(elem);
+    // Changed querySelector to getElementById which is faster
     document.getElementById("movingPizzas1").appendChild(elem);
   }
   updatePositions();

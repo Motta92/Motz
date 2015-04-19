@@ -508,6 +508,7 @@ function updatePositions() {
     //items[i].style.transform = "translateX(" + phase + "px)";
   }
 
+  recentlyUpdated = false;
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
   window.performance.mark("mark_end_frame");
@@ -518,14 +519,27 @@ function updatePositions() {
   }
 }
 
+var recentlyUpdated = false;
+
+function newUpdatePositions(){
+  if(!recentlyUpdated){
+    requestAnimationFrame(updatePositions);
+    recentlyUpdated = true;
+  }
+}
+
+
 // runs updatePositions on scroll
-window.addEventListener('scroll', updatePositions);
+//window.addEventListener('scroll', updatePositions);
+window.addEventListener('scroll', newUpdatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  var wh = (window.innerHeight || document.documentElement.clientHeight || 1080);
+  var pizzas = Math.ceil(wh / s)*cols;
+  for (var i = 0; i < pizzas; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -538,3 +552,5 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   updatePositions();
 });
+
+
